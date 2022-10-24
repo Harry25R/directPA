@@ -15,6 +15,7 @@
 #' Default method is Stouffer. 
 #' @param top the number of entries to be highlighted in the plot.
 #' @param nd the number of directions to plot (4 or 8)
+#' @param legend logical. Whether to show the legend. Default is FALSE.
 #' @param ... parameters for controlling the plot.
 #' @return The the list of enrichment analysis in tables. 
 #' @export
@@ -43,7 +44,7 @@
 #' bda$gene.tab[order(bda$gene.tab[,"--"]),][1:10,]
 #' bda$path.tab[order(bda$path.tab[,"--"]),][1:10,]
 #'
-directExplorer2d <- function(Tc, annotation=NULL, gene.method="OSP", path.method="Stouffer", top=10, nd=8, ...) {
+directExplorer2d <- function(Tc, annotation=NULL, gene.method="OSP", path.method="Stouffer", top=10, nd=8, legend = FALSE, ...) {
   
   directionCode <- c('++','+*','+-','*-','--','-*','-+','*+')
   gene.tab <- matrix(NA, nrow(Tc), nd)
@@ -104,6 +105,11 @@ directExplorer2d <- function(Tc, annotation=NULL, gene.method="OSP", path.method
      ids <- names(sort(gene.tab[,count])[1:top])
      points(Tc[ids,], col=color[i+1], pch=16)
      textxy(Tc[ids,1], Tc[ids,2], ids, col = color[i+1])
+  }
+  if(legend == TRUE){
+    # Add a legend outside the plot
+    par(oma=c(5, 4, 4, 4), xpd=TRUE)
+    legend("topright", legend = directionCode[ds+1], col = color, title="Direction", pch=16, cex = 0.8, bty = "n", pt.cex = 1.5, inset = c(-1,0.05))
   }
 
   results <- list()
